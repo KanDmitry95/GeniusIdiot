@@ -1,4 +1,6 @@
-﻿namespace GeniyIdiotConsoleApp
+﻿using System.Text;
+
+namespace GeniyIdiotConsoleApp
 {
     class Program
     {
@@ -49,17 +51,55 @@
 
                 Console.WriteLine($"{userName}, Ваш диагноз:" + diagnose);
 
-                var userChoise = GetUserChoice("Хотите начать сначала?");
-                if (!userChoise)
+                SaveUserResult(userName, correctAnswersCount, diagnose);
+
+                bool userChoise = GetUserChoice("Хотите посмотреть предыдущие результаты игры ?");
+                if (userChoise)
+                {
+                    ShowUserResult();
+                }
+
+                userChoise = GetUserChoice("Хотите начать сначала?");
+                if (userChoise == false)
                 {
                     break;
                 }
             }
         }
 
+        private static void ShowUserResult()
+        {
+            StreamReader reader = new StreamReader("userResault.txt", Encoding.UTF8);
+
+            Console.WriteLine("{0,-20}{1,18}{2,15}", "Имя", "Кол-во правильных ответов", "Диагноз");
+            while(!reader.EndOfStream)
+            {
+                string line = reader.ReadLine();
+                string[] values = line.Split("#");
+                string name = values[0];
+                int countRightAnswer = Convert.ToInt32(values[1]);
+                string diagnose = values[2];
+
+                Console.WriteLine("{0,-20}{1,18}{2,15}", name, countRightAnswer, diagnose);
+            }
+            reader.Close();
+        }
+
+        static void SaveUserResult(string userName, int correctAnswersCount, string diagnose)
+        {
+            string value = $"{userName}#{correctAnswersCount}#{diagnose}";
+            AppendToFile("userResault.txt", value);
+        }
+
+        static void AppendToFile(string fileName, string value)
+        {
+            StreamWriter writer = new StreamWriter(fileName, true, Encoding.UTF8);
+            writer.WriteLine(value);
+            writer.Close();
+        }
+
         static string CalculateDiagnose(int questionsCount, int correctAnswersCount)
         {
-            string diagnose = CalculateDiagnose(questionsCount, correctAnswersCount);
             string[] diagnoses = GetDiagnoses();
             int percentRightAnswer = correctAnswersCount * 100 / questionsCount;
 
