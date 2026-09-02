@@ -9,45 +9,37 @@ namespace GeniyIdiotConsoleApp
             while (true)
             {
                 Console.WriteLine($"Здравствуйте! Как вас зовут?");
-                string userName = Console.ReadLine();
+                var userName = Console.ReadLine();
 
-                int questionsCount = 5;
-                string[] questions = GetQuestions(questionsCount);
-                int[] answers = GetAnswers(questionsCount);
+                var questions = GetQuestions();
+                var answers = GetAnswers();
+                var questionsCount = questions.Count;
 
-                int correctAnswersCount = 0;
+                var correctAnswersCount = 0;
 
-                Random random = new Random();
-                for (int i = questionsCount - 1; i > 0; i--)
-                {
-                    int index = random.Next(0, i);
-                    string tempQuestion = questions[index];
-                    questions[index] = questions[i];
-                    questions[i] = tempQuestion;
+                var random = new Random();
 
-                    int tempAnswers = answers[index];
-                    answers[index] = answers[i];
-                    answers[i] = tempAnswers;
-                }
-
-                for (int i = 0; i < questionsCount; i++)
+                for (var i = 0; i < questionsCount; i++)
                 {
                     Console.WriteLine("Вопрос №" + (i + 1));
-                    Console.WriteLine(questions[i]);
+                    var randomQuestionIndex = random.Next(0, questions.Count);
+                    Console.WriteLine(questions[randomQuestionIndex]);
+                    var userAnswer = GetUserAnswer();
 
-                    int userAnswer = GetUserAnswer();
-
-                    int rightAnswer = answers[i];
+                    var rightAnswer = answers[randomQuestionIndex];
 
                     if (userAnswer == rightAnswer)
                     {
                         correctAnswersCount++;
                     }
+
+                    questions.RemoveAt(randomQuestionIndex);
+                    answers.RemoveAt(randomQuestionIndex);
                 }
 
                 Console.WriteLine("Количество правильных ответов: " + correctAnswersCount);
 
-                string diagnose = CalculateDiagnose(questionsCount, correctAnswersCount);
+                var diagnose = CalculateDiagnose(questionsCount, correctAnswersCount);
 
                 Console.WriteLine($"{userName}, Ваш диагноз:" + diagnose);
 
@@ -69,16 +61,16 @@ namespace GeniyIdiotConsoleApp
 
         private static void ShowUserResult()
         {
-            StreamReader reader = new StreamReader("userResault.txt", Encoding.UTF8);
+            var reader = new StreamReader("userResault.txt", Encoding.UTF8);
 
             Console.WriteLine("{0,-20}{1,18}{2,15}", "Имя", "Кол-во правильных ответов", "Диагноз");
             while(!reader.EndOfStream)
             {
-                string line = reader.ReadLine();
-                string[] values = line.Split("#");
-                string name = values[0];
-                int countRightAnswer = Convert.ToInt32(values[1]);
-                string diagnose = values[2];
+                var line = reader.ReadLine();
+                var values = line.Split("#");
+                var name = values[0];
+                var countRightAnswer = Convert.ToInt32(values[1]);
+                var diagnose = values[2];
 
                 Console.WriteLine("{0,-20}{1,18}{2,15}", name, countRightAnswer, diagnose);
             }
@@ -93,15 +85,15 @@ namespace GeniyIdiotConsoleApp
 
         static void AppendToFile(string fileName, string value)
         {
-            StreamWriter writer = new StreamWriter(fileName, true, Encoding.UTF8);
+            var writer = new StreamWriter(fileName, true, Encoding.UTF8);
             writer.WriteLine(value);
             writer.Close();
         }
 
         static string CalculateDiagnose(int questionsCount, int correctAnswersCount)
         {
-            string[] diagnoses = GetDiagnoses();
-            int percentRightAnswer = correctAnswersCount * 100 / questionsCount;
+            var diagnoses = GetDiagnoses();
+            var percentRightAnswer = correctAnswersCount * 100 / questionsCount;
 
             return diagnoses[percentRightAnswer / 20];
         }
@@ -157,25 +149,25 @@ namespace GeniyIdiotConsoleApp
             return diagnoses;
         }
 
-        static int[] GetAnswers(int questionCount)
+        static List<int> GetAnswers()
         {
-            int[] answers = new int[questionCount];
-            answers[0] = 6;
-            answers[1] = 9;
-            answers[2] = 25;
-            answers[3] = 60;
-            answers[4] = 2;
+            var answers = new List<int>();
+            answers.Add(6);
+            answers.Add(9);
+            answers.Add(25);
+            answers.Add(60);
+            answers.Add(2);
             return answers;
         }
 
-        static string[] GetQuestions(int questionCount)
+        static List<string> GetQuestions()
         {
-            string[] questions = new string[questionCount];
-            questions[0] = "Сколько будет два плюс два умноженное на два?";
-            questions[1] = "Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?";
-            questions[2] = "На двух руках 10 пальцев. Сколько пальцев на 5 руках?";
-            questions[3] = "Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?";
-            questions[4] = "Пять свечей горело, две потухли. Сколько свечей осталось?";
+            var questions = new List<string>();
+            questions.Add("Сколько будет два плюс два умноженное на два?");
+            questions.Add("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?");
+            questions.Add("На двух руках 10 пальцев. Сколько пальцев на 5 руках?");
+            questions.Add("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?");
+            questions.Add("Пять свечей горело, две потухли. Сколько свечей осталось?");
             return questions;
         }
     }
