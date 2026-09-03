@@ -12,9 +12,8 @@ namespace GeniyIdiotConsoleApp
                 var userName = Console.ReadLine();
 
                 var questions = QuestionsStorage.GetAll();
+                var user = new User(userName);
                 var questionsCount = questions.Count;
-
-                var correctAnswersCount = 0;
 
                 var random = new Random();
 
@@ -29,19 +28,20 @@ namespace GeniyIdiotConsoleApp
 
                     if (userAnswer == rightAnswer)
                     {
-                        correctAnswersCount++;
+                        user.AcceptRightAnswer();
                     }
 
                     questions.RemoveAt(randomQuestionIndex);
                 }
 
-                Console.WriteLine("Количество правильных ответов: " + correctAnswersCount);
+                Console.WriteLine("Количество правильных ответов: " + user.CountRightAnswers);
 
-                var diagnose = CalculateDiagnose(questionsCount, correctAnswersCount);
+                var diagnose = CalculateDiagnose(questionsCount, user.CountRightAnswers);
+                user.Diagnose = diagnose;
 
-                Console.WriteLine($"{userName}, Ваш диагноз:" + diagnose);
+                Console.WriteLine($"{userName}, Ваш диагноз: " + diagnose);
 
-                SaveUserResult(userName, correctAnswersCount, diagnose);
+                UsersResultStorage.Save(user);
 
                 bool userChoise = GetUserChoice("Хотите посмотреть предыдущие результаты игры ?");
                 if (userChoise)
@@ -59,33 +59,12 @@ namespace GeniyIdiotConsoleApp
 
         private static void ShowUserResult()
         {
-            var reader = new StreamReader("userResault.txt", Encoding.UTF8);
-
+            var result = UsersResultStorage.GetUserResult();
             Console.WriteLine("{0,-20}{1,18}{2,15}", "Имя", "Кол-во правильных ответов", "Диагноз");
-            while (!reader.EndOfStream)
+            foreach (var user in result)
             {
-                var line = reader.ReadLine();
-                var values = line.Split("#");
-                var name = values[0];
-                var countRightAnswer = Convert.ToInt32(values[1]);
-                var diagnose = values[2];
-
-                Console.WriteLine("{0,-20}{1,18}{2,15}", name, countRightAnswer, diagnose);
+                Console.WriteLine("{0,-20}{1,18}{2,15}", user.Name, user.CountRightAnswers, user.Diagnose);
             }
-            reader.Close();
-        }
-
-        static void SaveUserResult(string userName, int correctAnswersCount, string diagnose)
-        {
-            string value = $"{userName}#{correctAnswersCount}#{diagnose}";
-            AppendToFile("userResault.txt", value);
-        }
-
-        static void AppendToFile(string fileName, string value)
-        {
-            var writer = new StreamWriter(fileName, true, Encoding.UTF8);
-            writer.WriteLine(value);
-            writer.Close();
         }
 
         static string CalculateDiagnose(int questionsCount, int correctAnswersCount)

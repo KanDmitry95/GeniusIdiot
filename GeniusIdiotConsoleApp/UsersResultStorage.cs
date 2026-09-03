@@ -1,0 +1,44 @@
+﻿using System.Text;
+
+namespace GeniyIdiotConsoleApp
+{
+    public class UsersResultStorage
+    {
+        public static void Save(User user)
+        {
+            string value = $"{user.Name}#{user.CountRightAnswers}#{user.Diagnose}";
+            AppendToFile("userResault.txt", value);
+        }
+
+        public static List<User> GetUserResult()
+        {
+            var reader = new StreamReader("userResault.txt", Encoding.UTF8);
+            var result = new List<User>();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split("#");
+                var name = values[0];
+                var countRightAnswer = Convert.ToInt32(values[1]);
+                var diagnose = values[2];
+
+                var user = new User(name);
+                user.CountRightAnswers = countRightAnswer;
+                user.Diagnose = diagnose;
+
+                result.Add(user);
+            }
+            reader.Close();
+
+            return result;
+        }
+
+        public static void AppendToFile(string fileName, string value)
+        {
+            var writer = new StreamWriter(fileName, true, Encoding.UTF8);
+            writer.WriteLine(value);
+            writer.Close();
+        }
+    }
+}
