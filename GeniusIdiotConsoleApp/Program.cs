@@ -11,11 +11,9 @@ namespace GeniyIdiotConsoleApp
                 Console.WriteLine($"Здравствуйте! Как вас зовут?");
                 var userName = Console.ReadLine();
 
-                var questions = GetQuestions();
-                var answers = GetAnswers();
+                var questions = QuestionsStorage.GetAll();
+                var user = new User(userName);
                 var questionsCount = questions.Count;
-
-                var correctAnswersCount = 0;
 
                 var random = new Random();
 
@@ -23,27 +21,27 @@ namespace GeniyIdiotConsoleApp
                 {
                     Console.WriteLine("Вопрос №" + (i + 1));
                     var randomQuestionIndex = random.Next(0, questions.Count);
-                    Console.WriteLine(questions[randomQuestionIndex]);
+                    Console.WriteLine(questions[randomQuestionIndex].Text);
                     var userAnswer = GetUserAnswer();
 
-                    var rightAnswer = answers[randomQuestionIndex];
+                    var rightAnswer = questions[randomQuestionIndex].Answer;
 
                     if (userAnswer == rightAnswer)
                     {
-                        correctAnswersCount++;
+                        user.AcceptRightAnswer();
                     }
 
                     questions.RemoveAt(randomQuestionIndex);
-                    answers.RemoveAt(randomQuestionIndex);
                 }
 
-                Console.WriteLine("Количество правильных ответов: " + correctAnswersCount);
+                Console.WriteLine("Количество правильных ответов: " + user.CountRightAnswers);
 
-                var diagnose = CalculateDiagnose(questionsCount, correctAnswersCount);
+                var diagnose = CalculateDiagnose(questionsCount, user.CountRightAnswers);
+                user.Diagnose = diagnose;
 
-                Console.WriteLine($"{userName}, Ваш диагноз:" + diagnose);
+                Console.WriteLine($"{userName}, Ваш диагноз: " + diagnose);
 
-                SaveUserResult(userName, correctAnswersCount, diagnose);
+                UsersResultStorage.Save(user);
 
                 bool userChoise = GetUserChoice("Хотите посмотреть предыдущие результаты игры ?");
                 if (userChoise)
@@ -61,33 +59,12 @@ namespace GeniyIdiotConsoleApp
 
         private static void ShowUserResult()
         {
-            var reader = new StreamReader("userResault.txt", Encoding.UTF8);
-
+            var result = UsersResultStorage.GetUserResult();
             Console.WriteLine("{0,-20}{1,18}{2,15}", "Имя", "Кол-во правильных ответов", "Диагноз");
-            while(!reader.EndOfStream)
+            foreach (var user in result)
             {
-                var line = reader.ReadLine();
-                var values = line.Split("#");
-                var name = values[0];
-                var countRightAnswer = Convert.ToInt32(values[1]);
-                var diagnose = values[2];
-
-                Console.WriteLine("{0,-20}{1,18}{2,15}", name, countRightAnswer, diagnose);
+                Console.WriteLine("{0,-20}{1,18}{2,15}", user.Name, user.CountRightAnswers, user.Diagnose);
             }
-            reader.Close();
-        }
-
-        static void SaveUserResult(string userName, int correctAnswersCount, string diagnose)
-        {
-            string value = $"{userName}#{correctAnswersCount}#{diagnose}";
-            AppendToFile("userResault.txt", value);
-        }
-
-        static void AppendToFile(string fileName, string value)
-        {
-            var writer = new StreamWriter(fileName, true, Encoding.UTF8);
-            writer.WriteLine(value);
-            writer.Close();
         }
 
         static string CalculateDiagnose(int questionsCount, int correctAnswersCount)
@@ -149,26 +126,5 @@ namespace GeniyIdiotConsoleApp
             return diagnoses;
         }
 
-        static List<int> GetAnswers()
-        {
-            var answers = new List<int>();
-            answers.Add(6);
-            answers.Add(9);
-            answers.Add(25);
-            answers.Add(60);
-            answers.Add(2);
-            return answers;
-        }
-
-        static List<string> GetQuestions()
-        {
-            var questions = new List<string>();
-            questions.Add("Сколько будет два плюс два умноженное на два?");
-            questions.Add("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?");
-            questions.Add("На двух руках 10 пальцев. Сколько пальцев на 5 руках?");
-            questions.Add("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?");
-            questions.Add("Пять свечей горело, две потухли. Сколько свечей осталось?");
-            return questions;
-        }
     }
 }
