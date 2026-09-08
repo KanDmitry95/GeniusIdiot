@@ -13,11 +13,11 @@ namespace GeniyIdiotConsoleApp
         public static List<User> GetUserResult()
         {
             var value = FileProvider.GetValue("userResault.txt");
-            var lines = value.Split('\n');
+            var lines = value.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             var result = new List<User>();
             foreach(var line in lines)
             {
-                var values = line.Split("#");
+                var values = line.Split('#');
                 var name = values[0];
                 var countRightAnswer = Convert.ToInt32(values[1]);
                 var diagnose = values[2];
