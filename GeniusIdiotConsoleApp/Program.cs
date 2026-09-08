@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace GeniyIdiotConsoleApp
+﻿namespace GeniyIdiotConsoleApp
 {
     class Program
     {
@@ -125,6 +123,5 @@ namespace GeniyIdiotConsoleApp
             ];
             return diagnoses;
         }
-
     }
 }
