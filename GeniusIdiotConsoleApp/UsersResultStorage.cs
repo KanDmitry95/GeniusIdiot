@@ -7,17 +7,16 @@ namespace GeniyIdiotConsoleApp
         public static void Save(User user)
         {
             string value = $"{user.Name}#{user.CountRightAnswers}#{user.Diagnose}";
-            AppendToFile("userResault.txt", value);
+            FileProvider.Append("userResault.txt", value);
         }
 
         public static List<User> GetUserResult()
         {
-            var reader = new StreamReader("userResault.txt", Encoding.UTF8);
+            var value = FileProvider.GetValue("userResault.txt");
+            var lines = value.Split('\n');
             var result = new List<User>();
-
-            while (!reader.EndOfStream)
+            foreach(var line in lines)
             {
-                var line = reader.ReadLine();
                 var values = line.Split("#");
                 var name = values[0];
                 var countRightAnswer = Convert.ToInt32(values[1]);
@@ -29,16 +28,8 @@ namespace GeniyIdiotConsoleApp
 
                 result.Add(user);
             }
-            reader.Close();
 
             return result;
-        }
-
-        public static void AppendToFile(string fileName, string value)
-        {
-            var writer = new StreamWriter(fileName, true, Encoding.UTF8);
-            writer.WriteLine(value);
-            writer.Close();
         }
     }
 }
