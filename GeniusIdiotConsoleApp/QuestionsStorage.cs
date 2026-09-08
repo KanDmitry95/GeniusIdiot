@@ -13,5 +13,11 @@
             questions.Add(new Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 2));
             return questions;
         }
+
+        public static void Add(Question newQuestion)
+        {
+            string value = $"{newQuestion.Text}#{newQuestion.Answer}";
+            FileProvider.Append("questions.txt", value);
+        }
     }
 }
