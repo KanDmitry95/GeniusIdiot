@@ -53,12 +53,41 @@
                     AddNewQuestion();
                 }
 
+                userChoise = GetUserChoice("Хотите удалить существующий вопрос ?");
+                if (userChoise)
+                {
+                    RemoveQuestion();
+                }
+
                 userChoise = GetUserChoice("Хотите начать сначала?");
                 if (userChoise == false)
                 {
                     break;
                 }
+
             }
+        }
+
+        static void RemoveQuestion()
+        {
+            Console.WriteLine("Введите номер удаляемого вопроса");
+            var questions = QuestionsStorage.GetAll();
+
+            for (int i = 0; i < questions.Count; i++)
+            {
+                Console.WriteLine((i + 1) + ". " + questions[i].Text);
+            }
+
+            var removeQuestionNumber = GetNumber();
+            while(removeQuestionNumber < 1 || removeQuestionNumber > questions.Count)
+            {
+                Console.WriteLine("Введите число от 1 до " + questions.Count);
+                removeQuestionNumber = GetNumber();
+            }
+
+            var removeQuestion = questions[removeQuestionNumber - 1];
+
+            QuestionsStorage.Remove(removeQuestion);
         }
 
         static void AddNewQuestion()
