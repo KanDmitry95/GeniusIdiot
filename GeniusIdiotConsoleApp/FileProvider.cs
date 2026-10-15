@@ -22,5 +22,10 @@ namespace GeniyIdiotConsoleApp
         {
             return File.Exists(fileName);
         }
+
+        public static void Clear(string fileName)
+        {
+            File.WriteAllText(fileName, string.Empty);
+        }
     }
 }

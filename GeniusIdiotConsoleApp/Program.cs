@@ -79,11 +79,15 @@
             }
 
             var removeQuestionNumber = GetNumber();
-
-            if (removeQuestionNumber == 0)
+            while(removeQuestionNumber < 1 || removeQuestionNumber > questions.Count)
             {
-
+                Console.WriteLine("Введите число от 1 до " + questions.Count);
+                removeQuestionNumber = GetNumber();
             }
+
+            var removeQuestion = questions[removeQuestionNumber - 1];
+
+            QuestionsStorage.Remove(removeQuestion);
         }
 
         static void AddNewQuestion()
