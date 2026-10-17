@@ -23,12 +23,10 @@
                     var userAnswer = GetNumber();
 
                     var rightAnswer = questions[randomQuestionIndex].Answer;
-
                     if (userAnswer == rightAnswer)
                     {
                         user.AcceptRightAnswer();
                     }
-
                     questions.RemoveAt(randomQuestionIndex);
                 }
 

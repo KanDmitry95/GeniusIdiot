@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="GeniusIdiotConsoleApp/GeniusIdiotConsoleApp.csproj" />
+  <Project Path="WinFormsApp3/GeniusIdiotWinFormsApp.csproj" Id="daa32165-a55a-4523-adb2-e404bafa458b" />
 </Solution>
