@@ -4,7 +4,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WinFormsApp3
 {
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
         private List<Question> questions;
         private Question currentQuestion;
@@ -12,7 +12,7 @@ namespace WinFormsApp3
         private User user;
         private int questionNumber;
 
-        public mainForm()
+        public MainForm()
         {
             InitializeComponent();
         }
