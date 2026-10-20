@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 
-namespace GeniyIdiotConsoleApp
+namespace GeniusIdiot.Common
 {
     public class FileProvider
     {
@@ -21,6 +22,11 @@ namespace GeniyIdiotConsoleApp
         public static bool Exists(string fileName)
         {
             return File.Exists(fileName);
+        }
+
+        public static void Clear(string fileName)
+        {
+            File.WriteAllText(fileName, string.Empty);
         }
     }
 }

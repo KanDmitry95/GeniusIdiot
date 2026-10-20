@@ -1,4 +1,7 @@
-﻿namespace GeniyIdiotConsoleApp
+﻿using System;
+using System.Collections.Generic;
+
+namespace GeniusIdiot.Common
 {
     public class QuestionsStorage
     {
@@ -8,7 +11,7 @@
             if (FileProvider.Exists("questions.txt"))
             {
                 var value = FileProvider.GetValue("questions.txt");
-                var lines = value.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                var lines = value.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var line in lines)
                 {
                     var values = line.Split('#');
@@ -28,18 +31,39 @@
                 questions.Add(new Question("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?", 60));
                 questions.Add(new Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 2));
 
-                foreach (var question in questions)
-                {
-                    Add(question);
-                }
+                SaveQuestions(questions);
             }
             return questions;
+        }
+
+        private static void SaveQuestions(List<Question> questions)
+        {
+            foreach (var question in questions)
+            {
+                Add(question);
+            }
         }
 
         public static void Add(Question newQuestion)
         {
             string value = $"{newQuestion.Text}#{newQuestion.Answer}";
             FileProvider.Append("questions.txt", value);
+        }
+
+        public static void Remove(Question removeQuestion)
+        {
+            var questions = GetAll();
+            for (int i = 0; i < questions.Count; i++)
+            {
+                if (questions[i].Text == removeQuestion.Text)
+                {
+                    questions.RemoveAt(i);
+                    break;
+                }
+            }
+            questions.Remove(removeQuestion);
+            FileProvider.Clear("questions.txt");
+            SaveQuestions(questions);
         }
     }
 }

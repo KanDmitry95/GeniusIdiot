@@ -1,21 +1,24 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace GeniyIdiotConsoleApp
+namespace GeniusIdiot.Common
 {
     public class UsersResultStorage
     {
+        private static string path = "userResault.txt";
         public static void Save(User user)
         {
             string value = $"{user.Name}#{user.CountRightAnswers}#{user.Diagnose}";
-            FileProvider.Append("userResault.txt", value);
+            FileProvider.Append(path, value);
         }
 
         public static List<User> GetUserResult()
         {
-            var value = FileProvider.GetValue("userResault.txt");
-            var lines = value.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var value = FileProvider.GetValue(path);
+            var lines = value.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             var result = new List<User>();
-            foreach(var line in lines)
+            foreach (var line in lines)
             {
                 var values = line.Split('#');
                 var name = values[0];
