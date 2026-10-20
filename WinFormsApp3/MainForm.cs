@@ -1,5 +1,6 @@
-using GeniyIdiotConsoleApp;
-using Microsoft.VisualBasic.ApplicationServices;
+using GeniusIdiot.Common;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+
 
 namespace WinFormsApp3
 {
@@ -7,7 +8,9 @@ namespace WinFormsApp3
     {
         private List<Question> questions;
         private Question currentQuestion;
+        private int countQuestion;
         private User user;
+        private int questionNumber;
 
         public mainForm()
         {
@@ -17,8 +20,9 @@ namespace WinFormsApp3
         private void mainForm_Load(object sender, EventArgs e)
         {
             questions = QuestionsStorage.GetAll();
+            countQuestion = questions.Count;
             user = new User("Неизвестно");
-
+            questionNumber = 0;
             ShowNextQuestion();
         }
 
@@ -28,6 +32,8 @@ namespace WinFormsApp3
             var randomQuestionIndex = random.Next(0, questions.Count);
             currentQuestion = questions[randomQuestionIndex];
             questionTextLabel.Text = currentQuestion.Text;
+            questionNumber++;
+            questionNumberLabel.Text = "Вопрос № " + questionNumber;
         }
 
         private void nextButton_Click(object sender, EventArgs e)
@@ -38,7 +44,17 @@ namespace WinFormsApp3
             {
                 user.AcceptRightAnswer();
             }
-            questions.RemoveAt(randomQuestionIndex);
+            questions.Remove(currentQuestion);
+
+            var endGame = questions.Count == 0;
+            if (endGame)
+            {
+                user.Diagnose = DiagnoseCalculator.Calculate(countQuestion, user);
+                MessageBox.Show(user.Diagnose);
+                return;
+            }
+
+            ShowNextQuestion();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace GeniyIdiotConsoleApp
+﻿using GeniusIdiot.Common;
+
+namespace GeniyIdiotConsoleApp
 {
     class Program
     {
@@ -62,7 +64,6 @@
                 {
                     break;
                 }
-
             }
         }
 

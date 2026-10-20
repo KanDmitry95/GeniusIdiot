@@ -1,4 +1,7 @@
-﻿namespace GeniyIdiotConsoleApp
+﻿using System;
+using System.Collections.Generic;
+
+namespace GeniusIdiot.Common
 {
     public class QuestionsStorage
     {
@@ -8,7 +11,7 @@
             if (FileProvider.Exists("questions.txt"))
             {
                 var value = FileProvider.GetValue("questions.txt");
-                var lines = value.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                var lines = value.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var line in lines)
                 {
                     var values = line.Split('#');

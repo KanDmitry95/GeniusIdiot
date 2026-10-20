@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace GeniyIdiotConsoleApp
+namespace GeniusIdiot.Common
 {
     public class UsersResultStorage
     {
@@ -14,9 +16,9 @@ namespace GeniyIdiotConsoleApp
         public static List<User> GetUserResult()
         {
             var value = FileProvider.GetValue(path);
-            var lines = value.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var lines = value.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             var result = new List<User>();
-            foreach(var line in lines)
+            foreach (var line in lines)
             {
                 var values = line.Split('#');
                 var name = values[0];
