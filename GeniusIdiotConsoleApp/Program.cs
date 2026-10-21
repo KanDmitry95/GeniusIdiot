@@ -34,7 +34,7 @@ namespace GeniyIdiotConsoleApp
 
                 Console.WriteLine("Количество правильных ответов: " + user.CountRightAnswers);
 
-                var diagnose = CalculateDiagnose(questionsCount, user.CountRightAnswers);
+                var diagnose = DiagnoseCalculator.Calculate(questionsCount, user.CountRightAnswers);
                 user.Diagnose = diagnose;
 
                 Console.WriteLine($"{userName}, Ваш диагноз: " + diagnose);
@@ -110,15 +110,6 @@ namespace GeniyIdiotConsoleApp
                 Console.WriteLine("{0,-20}{1,18}{2,15}", user.Name, user.CountRightAnswers, user.Diagnose);
             }
         }
-
-        static string CalculateDiagnose(int questionsCount, int correctAnswersCount)
-        {
-            var diagnoses = GetDiagnoses();
-            var percentRightAnswer = correctAnswersCount * 100 / questionsCount;
-
-            return diagnoses[percentRightAnswer / 20];
-        }
-
         private static int GetNumber()
         {
             while (true)
@@ -154,20 +145,6 @@ namespace GeniyIdiotConsoleApp
                     return true;
                 }
             }
-        }
-
-        static string[] GetDiagnoses()
-        {
-            string[] diagnoses =
-            [
-                "Идиот",
-                "Кретин",
-                "Дурак",
-                "Нормальный",
-                "Талант",
-                "Гений"
-            ];
-            return diagnoses;
         }
     }
 }
