@@ -1,4 +1,4 @@
-namespace WinFormsApp3
+namespace GeniusIdiotWinFormsApp
 {
     internal static class Program
     {

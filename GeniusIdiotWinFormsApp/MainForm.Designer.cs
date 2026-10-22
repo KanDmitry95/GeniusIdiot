@@ -1,4 +1,4 @@
-﻿namespace WinFormsApp3
+﻿namespace GeniusIdiotWinFormsApp
 {
     partial class MainForm
     {
@@ -28,71 +28,71 @@
         /// </summary>
         private void InitializeComponent()
         {
-            nextButton = new Button();
             questionNumberLabel = new Label();
             questionTextLabel = new Label();
             userAnswerTextBox = new TextBox();
+            nextButton = new Button();
             SuspendLayout();
-            // 
-            // nextButton
-            // 
-            nextButton.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            nextButton.Location = new Point(108, 241);
-            nextButton.Name = "nextButton";
-            nextButton.Size = new Size(264, 111);
-            nextButton.TabIndex = 0;
-            nextButton.Text = "Далее";
-            nextButton.UseVisualStyleBackColor = true;
-            nextButton.Click += nextButton_Click;
             // 
             // questionNumberLabel
             // 
             questionNumberLabel.AutoSize = true;
             questionNumberLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            questionNumberLabel.Location = new Point(33, 40);
+            questionNumberLabel.Location = new Point(11, 25);
             questionNumberLabel.Name = "questionNumberLabel";
             questionNumberLabel.Size = new Size(97, 21);
-            questionNumberLabel.TabIndex = 1;
+            questionNumberLabel.TabIndex = 0;
             questionNumberLabel.Text = "Вопрос № 1";
             // 
             // questionTextLabel
             // 
             questionTextLabel.AutoSize = true;
             questionTextLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            questionTextLabel.Location = new Point(33, 96);
+            questionTextLabel.Location = new Point(11, 70);
             questionTextLabel.Name = "questionTextLabel";
             questionTextLabel.Size = new Size(111, 21);
-            questionTextLabel.TabIndex = 2;
+            questionTextLabel.TabIndex = 0;
             questionTextLabel.Text = "Текст вопроса";
             // 
             // userAnswerTextBox
             // 
-            userAnswerTextBox.Location = new Point(33, 156);
+            userAnswerTextBox.Location = new Point(201, 187);
             userAnswerTextBox.Name = "userAnswerTextBox";
-            userAnswerTextBox.Size = new Size(282, 23);
-            userAnswerTextBox.TabIndex = 3;
+            userAnswerTextBox.Size = new Size(181, 23);
+            userAnswerTextBox.TabIndex = 1;
             // 
-            // mainForm
+            // nextButton
+            // 
+            nextButton.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            nextButton.Location = new Point(201, 237);
+            nextButton.Name = "nextButton";
+            nextButton.Size = new Size(181, 69);
+            nextButton.TabIndex = 2;
+            nextButton.Text = "Далее";
+            nextButton.UseVisualStyleBackColor = true;
+            nextButton.Click += nextButton_Click;
+            // 
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(466, 400);
+            ClientSize = new Size(583, 450);
+            Controls.Add(nextButton);
             Controls.Add(userAnswerTextBox);
             Controls.Add(questionTextLabel);
             Controls.Add(questionNumberLabel);
-            Controls.Add(nextButton);
-            Name = "mainForm";
+            Name = "MainForm";
             Text = "Гений Идиот";
-            Load += mainForm_Load;
+            Load += MainForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Button nextButton;
         private Label questionNumberLabel;
         private Label questionTextLabel;
         private TextBox userAnswerTextBox;
+        private Button nextButton;
     }
 }
