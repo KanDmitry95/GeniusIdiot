@@ -5,11 +5,11 @@ namespace GeniusIdiotWinFormsApp
 {
     public partial class MainForm : Form
     {
+        User user;
         List<Question> questions;
         Question currentQuestion;
         int questionNumer = 1;
         int countQuestion;
-        User user = new User("Неизвестно");
         public MainForm()
         {
             InitializeComponent();
@@ -17,6 +17,10 @@ namespace GeniusIdiotWinFormsApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            var welcomeForm = new WelcomeForm();
+            welcomeForm.ShowDialog();
+            user = new User(welcomeForm.userNameTextBox.Text);
+
             questions = QuestionsStorage.GetAll();
             countQuestion = questions.Count;
             ShowNextQuestion();
