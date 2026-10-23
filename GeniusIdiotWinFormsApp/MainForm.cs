@@ -55,13 +55,29 @@ namespace GeniusIdiotWinFormsApp
 
                 UsersResultStorage.Save(user);
 
-                var message = user.Name +", Ваш диагноз: " + diagnose;
+                var message = user.Name + ", Ваш диагноз: " + diagnose;
                 MessageBox.Show(message);
             }
             else
             {
                 ShowNextQuestion();
             }
+        }
+
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void рестартToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void показатьПредыдущийРезультатToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var resultsForm = new ResultsForm();
+            resultsForm.ShowDialog();
         }
     }
 }
