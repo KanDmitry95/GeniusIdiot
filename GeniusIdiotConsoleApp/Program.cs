@@ -1,4 +1,5 @@
-﻿using GeniusIdiot.Common;
+﻿using GeniusIdiot;
+using GeniusIdiot.Common;
 
 namespace GeniyIdiotConsoleApp
 {
@@ -112,21 +113,12 @@ namespace GeniyIdiotConsoleApp
         }
         private static int GetNumber()
         {
-            while (true)
+            int number;
+            while (!InputValidator.TryParseToNumber(Console.ReadLine(), out number, out string errorMesage))
             {
-                try
-                {
-                    return int.Parse(Console.ReadLine());
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Введите число!");
-                }
-                catch (OverflowException)
-                {
-                    Console.WriteLine("Слишком большое число");
-                }
+                Console.WriteLine(errorMesage);
             }
+            return number;
         }
 
         static bool GetUserChoice(string message)
