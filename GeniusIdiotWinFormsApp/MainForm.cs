@@ -1,3 +1,4 @@
+using GeniusIdiot;
 using GeniusIdiot.Common;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
@@ -39,28 +40,34 @@ namespace GeniusIdiotWinFormsApp
 
         private void nextButton_Click(object sender, EventArgs e)
         {
-            var userAnswer = Convert.ToInt32(userAnswerTextBox.Text);
-
-            var rightAnswer = currentQuestion.Answer;
-            if (userAnswer == rightAnswer)
+            var parsed = InputValidator.TryParseToNumber(userAnswerTextBox.Text, out int userAnswer, out string errorMessage);
+            if (!parsed)
             {
-                user.AcceptRightAnswer();
-            }
-            questions.Remove(currentQuestion);
-
-            if (questions.Count == 0)
-            {
-                var diagnose = DiagnoseCalculator.Calculate(countQuestion, user.CountRightAnswers);
-                user.Diagnose = diagnose;
-
-                UsersResultStorage.Save(user);
-
-                var message = user.Name + ", Ваш диагноз: " + diagnose;
-                MessageBox.Show(message);
+                MessageBox.Show(errorMessage);
             }
             else
             {
-                ShowNextQuestion();
+                var rightAnswer = currentQuestion.Answer;
+                if (userAnswer == rightAnswer)
+                {
+                    user.AcceptRightAnswer();
+                }
+                questions.Remove(currentQuestion);
+
+                if (questions.Count == 0)
+                {
+                    var diagnose = DiagnoseCalculator.Calculate(countQuestion, user.CountRightAnswers);
+                    user.Diagnose = diagnose;
+
+                    UsersResultStorage.Save(user);
+
+                    var message = user.Name + ", Ваш диагноз: " + diagnose;
+                    MessageBox.Show(message);
+                }
+                else
+                {
+                    ShowNextQuestion();
+                }
             }
         }
 
