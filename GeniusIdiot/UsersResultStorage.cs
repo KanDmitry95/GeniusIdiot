@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,7 +8,7 @@ namespace GeniusIdiot.Common
 {
     public class UsersResultStorage
     {
-        private static string path = "userResault.txt";
+        private static string path = "userResault.json";
         public static void Save(User user)
         {
             string value = $"{user.Name}#{user.CountRightAnswers}#{user.Diagnose}";
@@ -33,6 +35,12 @@ namespace GeniusIdiot.Common
             }
 
             return result;
+        }
+
+        static void Save (List<User> userResults)
+        {
+            var jsonData = JsonConvert.SerializeObject(userResults);
+            FileProvider.Append(path, jsonData);
         }
     }
 }
