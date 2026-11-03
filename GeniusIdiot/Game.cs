@@ -51,5 +51,14 @@ namespace GeniusIdiot
         {
             return questions.Count == 0;
         }
+
+        public string CalculateDiagnose()
+        {
+            var diagnose = DiagnoseCalculator.Calculate(countQuestion, user.CountRightAnswers);
+            user.Diagnose = diagnose;
+            UsersResultStorage.Save(user);
+
+            return user.Name + ", Ваш диагноз: " + diagnose;
+        }
     }
 }

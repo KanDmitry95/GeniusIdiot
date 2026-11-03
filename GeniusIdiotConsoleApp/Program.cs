@@ -10,37 +10,21 @@ namespace GeniyIdiotConsoleApp
             while (true)
             {
                 Console.WriteLine($"Здравствуйте! Как вас зовут?");
-                var userName = Console.ReadLine();
+                var user = new User(Console.ReadLine());
+                var game = new Game(user);
 
-                var questions = QuestionsStorage.GetAll();
-                var user = new User(userName);
-                var questionsCount = questions.Count;
-
-                var random = new Random();
-
-                for (var i = 0; i < questionsCount; i++)
+                while (!game.End())
                 {
-                    Console.WriteLine("Вопрос №" + (i + 1));
-                    var randomQuestionIndex = random.Next(0, questions.Count);
-                    Console.WriteLine(questions[randomQuestionIndex].Text);
+                    var currentQuestion = game.GetNextQuestion();
+                    Console.WriteLine(game.GetQuestionNumberText());
+                    Console.WriteLine(currentQuestion.Text);
                     var userAnswer = GetNumber();
 
-                    var rightAnswer = questions[randomQuestionIndex].Answer;
-                    if (userAnswer == rightAnswer)
-                    {
-                        user.AcceptRightAnswer();
-                    }
-                    questions.RemoveAt(randomQuestionIndex);
+                    game.AcceptAnswer(userAnswer);
                 }
 
-                Console.WriteLine("Количество правильных ответов: " + user.CountRightAnswers);
-
-                var diagnose = DiagnoseCalculator.Calculate(questionsCount, user.CountRightAnswers);
-                user.Diagnose = diagnose;
-
-                Console.WriteLine($"{userName}, Ваш диагноз: " + diagnose);
-
-                UsersResultStorage.Save(user);
+                var message = game.CalculateDiagnose();
+                Console.WriteLine(message);
 
                 bool userChoise = GetUserChoice("Хотите посмотреть предыдущие результаты игры ?");
                 if (userChoise)
@@ -111,6 +95,7 @@ namespace GeniyIdiotConsoleApp
                 Console.WriteLine("{0,-20}{1,18}{2,15}", user.Name, user.CountRightAnswers, user.Diagnose);
             }
         }
+
         private static int GetNumber()
         {
             int number;
