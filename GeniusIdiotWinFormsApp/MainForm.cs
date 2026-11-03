@@ -1,16 +1,11 @@
 using GeniusIdiot;
 using GeniusIdiot.Common;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GeniusIdiotWinFormsApp
 {
     public partial class MainForm : Form
     {
-        User user;
-        List<Question> questions;
-        Question currentQuestion;
-        int questionNumer = 1;
-        int countQuestion;
+        Game game;
         public MainForm()
         {
             InitializeComponent();
@@ -20,22 +15,17 @@ namespace GeniusIdiotWinFormsApp
         {
             var welcomeForm = new WelcomeForm();
             welcomeForm.ShowDialog();
-            user = new User(welcomeForm.userNameTextBox.Text);
-
-            questions = QuestionsStorage.GetAll();
-            countQuestion = questions.Count;
+            var user = new User(welcomeForm.userNameTextBox.Text);
+            game = new Game(user);
             ShowNextQuestion();
         }
 
         private void ShowNextQuestion()
         {
-            var random = new Random();
-            var randomQuestionIndex = random.Next(0, questions.Count);
-            currentQuestion = questions[randomQuestionIndex];
+            var currentQuestion = game.GetNextQuestion();
             questionTextLabel.Text = currentQuestion.Text;
 
-            questionNumberLabel.Text = "Вопрос №" + questionNumer;
-            questionNumer++;
+            questionNumberLabel.Text = game.GetQuestionNumberText();
         }
 
         private void nextButton_Click(object sender, EventArgs e)
@@ -47,21 +37,11 @@ namespace GeniusIdiotWinFormsApp
             }
             else
             {
-                var rightAnswer = currentQuestion.Answer;
-                if (userAnswer == rightAnswer)
+                game.AcceptAnswer(userAnswer);
+
+                if (!game.End())
                 {
-                    user.AcceptRightAnswer();
-                }
-                questions.Remove(currentQuestion);
-
-                if (questions.Count == 0)
-                {
-                    var diagnose = DiagnoseCalculator.Calculate(countQuestion, user.CountRightAnswers);
-                    user.Diagnose = diagnose;
-
-                    UsersResultStorage.Save(user);
-
-                    var message = user.Name + ", Ваш диагноз: " + diagnose;
+                    var message = game.CalculateDiagnose();
                     MessageBox.Show(message);
                 }
                 else
